@@ -1,0 +1,7 @@
+.idea
+.git
+.DS_Store
+package-lock.json
+node_modules
+yarn-error.log
+dist
