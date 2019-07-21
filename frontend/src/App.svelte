@@ -5,5 +5,5 @@
   import Main from "modules/Main"
 </script>
 
-<Header></Header>
-<Main></Main>
+<Header/>
+<Main/>

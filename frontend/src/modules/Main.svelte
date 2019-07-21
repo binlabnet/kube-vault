@@ -1,14 +1,24 @@
 <main class="row">
-  <List></List>
-  <Secret></Secret>
+  {#if loaded}
+    <List></List>
+    <Secret></Secret>
+  {:else}
+    <Loader/>
+  {/if}
 </main>
-
 
 <script>
   import List from "modules/List"
   import Secret from "modules/Secret"
-</script>
+  import Loader from "components/Loader"
 
+  import { namespaces } from "store.js"
+
+  let loaded
+  namespaces.selected.subscribe(value => {
+    loaded = value
+  })
+</script>
 
 <style>
   main {

@@ -1,45 +1,57 @@
 <div class="secretsList">
-  {#each secretsList as secret}
-    <div
-      on:click="{() => selectSecret(secret.name)}"
-      class="secret row a-center j-between {selectedSecret === secret.name ? 'active' : ''}"
-      title="{secret.name}"
-    >
-      <h2>{secret.name}</h2>
-      <p>{secret.objects}</p>
+  {#if $secrets.length}
+    {#each $secrets as secret}
+      <div
+        on:click="{() => selectSecret(secret)}"
+        class="secret row a-center j-between {selectedSecret.name === secret.name ? 'active' : ''}"
+        title="{secret.name}"
+      >
+        <h2>{secret.name}</h2>
+        <p>{secret.objects}</p>
+      </div>
+    {/each}
+    <div class="footer row a-center j-end">
+      <button on:click="{createSecret}">Add</button>
     </div>
-  {/each}
+  {:else}
+    <Loader/>
+  {/if}
 </div>
 
-
 <script>
+  import Loader from "components/Loader"
+  import { namespaces, secrets } from "store.js"
+  import { get } from "svelte/store"
   import axios from "axios"
-  import { namespace, secret } from "store.js"
 
-  let loading = false
-  let secretsList = []
-  let selectedSecret
+  let selectedSecret = {}
 
-  const unsubscribe = namespace.subscribe(value => {
+  secrets.selected.subscribe(value => {
     if (value) {
-      axios.get(`${process.env.API_HOST}/vault/${value}`).then((res) => {
-        if (res.data) {
-          secretsList = res.data
-          selectedSecret = secretsList[0].name
-          secret.set(selectedSecret)
-        }
-      }).catch((err) => {
-        console.log(err)
-      })
+      selectedSecret = value
     }
   })
 
-  function selectSecret (name) {
-    selectedSecret = name
-    secret.set(selectedSecret)
+  function selectSecret (value) {
+    secrets.select(value)
+  }
+
+  function createSecret() {
+    let name = prompt('Provide name for new secret:')
+    if (!name.length) {
+      return
+    }
+    const namespace = get(namespaces.selected)
+
+    axios.post(`${process.env.API_HOST}/vault/${namespace}/${name}`, {}).then((res) => {
+      if (res.data) {
+        secrets.update()
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
   }
 </script>
-
 
 <style>
   .secretsList {
@@ -47,7 +59,9 @@
     height: 100%;
     border-right: solid #d7d7d7 1px;
     overflow-x: hidden;
+    position: relative;
   }
+
   .secretsList > .secret {
     width: 100%;
     height: 50px;
@@ -73,5 +87,14 @@
   .secretsList > .secret > p {
     font-weight: lighter;
     font-size: 12px;
+  }
+
+  .secretsList > .footer {
+    width: 100%;
+    height: 50px;
+    position: absolute;
+    bottom: 0;
+    border-top: solid #d7d7d7 1px;
+    padding: 8px;
   }
 </style>

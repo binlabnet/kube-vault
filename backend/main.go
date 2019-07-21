@@ -14,7 +14,7 @@ type args struct {
 	Namespace  string `long:"n" env:"NAMESPACE" default:"default" description:"default namespace"`
 	Kubeconfig string `long:"kubeconfig" env:"HOME" default:"" description:"(optional) absolute path to the kubeconfig file"`
 	Version    string `long:"version" env:"VERSION" default:"unknown" description:"version number"`
-	Port       int    `long:"port" env:"PORT" default:"9090" description:"rest server port"`
+	Port       int    `long:"port" env:"PORT" default:"8080" description:"rest server port"`
 	Debug      bool   `long:"debug" env:"DEBUG" description:"debug"`
 }
 

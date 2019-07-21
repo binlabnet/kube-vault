@@ -4,41 +4,28 @@
     <a href="https://github.com/exelban/kube-vault" target="_blank" title="Project page">{version}</a>
   </div>
 
-  <div class="namespaces">
-    <select title="Namespace" bind:value={selectedNamespace}>
-      {#each namespaces as n}
-        <option value="{n}">{n}</option>
-      {/each}
-    </select>
-  </div>
+  {#if $namespaces.length}
+    <div class="namespaces">
+      <select title="Namespace" bind:value={selectedNamespace}>
+        {#each $namespaces as n}
+          <option value="{n}">{n}</option>
+        {/each}
+      </select>
+    </div>
+  {/if}
 </header>
 
 <script>
-  import axios from "axios"
-  import { namespace } from "store.js"
+  import { namespaces } from "store.js"
 
   const version = `v${process.env.VERSION}`
   let selectedNamespace
-  let namespaces = []
 
-  const unsubscribe = namespace.subscribe(value => {
-    selectedNamespace = value
-  })
   $: {
     if (selectedNamespace) {
-      namespace.set(selectedNamespace)
+      namespaces.select(selectedNamespace)
     }
   }
-
-  axios.get(`${process.env.API_HOST}/namespaces`).then((res) => {
-    if (res.data) {
-      namespaces = res.data
-      selectedNamespace = namespaces[0]
-      namespace.set(selectedNamespace)
-    }
-  }).catch((err) => {
-    console.log(err)
-  })
 </script>
 
 <style>

@@ -190,10 +190,6 @@ func (m *Vault) Add(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if len(secretData) == 0 {
-		http.Error(w, "secret cannot be empty", http.StatusBadRequest)
-		return
-	}
 
 	var data = map[string][]byte{}
 
@@ -206,9 +202,13 @@ func (m *Vault) Add(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		var base64Value = make([]byte, base64.StdEncoding.EncodedLen(len(value)))
-		base64.StdEncoding.Encode(base64Value, []byte(value))
-		data[key] = base64Value
+		var stringValue = []byte(value)
+		v, err := base64.StdEncoding.DecodeString(value)
+		if err == nil {
+			stringValue = v
+		}
+
+		data[key] = []byte(stringValue)
 	}
 
 	newSecret := &v1.Secret{

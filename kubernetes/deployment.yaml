@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kube-vault-deployment
+  labels:
+    app: kube-vault
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 51%
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: kube-vault
+    spec:
+      containers:
+        - name: kube-vault
+          image: exelban/kube-vault:0.0.1
+          imagePullPolicy: Always
+          ports:
+            - name: app-port
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: app-port
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: app-port

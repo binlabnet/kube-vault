@@ -1,4 +1,79 @@
-import { writable } from "svelte/store"
+import { writable, get } from "svelte/store"
+import axios from "axios"
 
-export const namespace = writable(undefined)
-export const secret = writable(undefined)
+
+export const namespaces = (() => {
+  const { subscribe, set, update } = writable([])
+
+  const selected = (() => {
+    const { subscribe, set, update } = writable(undefined)
+    return {
+      subscribe,
+      set,
+      update,
+    }
+  })()
+
+  function fetchNamespaces () {
+    axios.get(`${process.env.API_HOST}/namespaces`).then((res) => {
+      if (res.data) {
+        set(res.data)
+        selected.set(res.data[0])
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+  fetchNamespaces()
+
+  return {
+    selected,
+    subscribe,
+    get,
+    select: (value) => {
+      selected.set(value)
+    },
+    update: () => fetchNamespaces,
+  }
+})()
+
+export const secrets = (() => {
+  const { subscribe, set } = writable([])
+
+  const selected = (() => {
+    const { subscribe, set, update } = writable(undefined)
+    return {
+      subscribe,
+      set,
+      update,
+    }
+  })()
+
+  function fetchSecrets () {
+    if (get(namespaces.selected)) {
+      axios.get(`${process.env.API_HOST}/vault/${get(namespaces.selected)}`).then((res) => {
+        if (res.data) {
+          res.data.forEach(s => {
+            s.namespace = get(namespaces.selected)
+          })
+          set(res.data)
+          selected.set(res.data[0])
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+  }
+  namespaces.selected.subscribe(() => {
+    fetchSecrets()
+  })
+
+  return {
+    selected,
+    subscribe,
+    select: (value) => {
+      selected.set(value)
+    },
+    update: () => fetchSecrets(),
+  }
+})()

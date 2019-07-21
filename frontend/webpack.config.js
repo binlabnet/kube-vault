@@ -107,7 +107,7 @@ module.exports = (env, argv) => {
     mode,
     devtool: prod ? false : "source-map",
     devServer: {
-      port: 8080,
+      port: 8081,
       host: "localhost",
     },
   }
