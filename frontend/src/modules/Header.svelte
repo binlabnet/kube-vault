@@ -21,6 +21,10 @@
   const version = `v${process.env.VERSION}`
   let selectedNamespace
 
+  namespaces.selected.subscribe(value => {
+    selectedNamespace = value
+  })
+
   $: {
     if (selectedNamespace) {
       namespaces.select(selectedNamespace)

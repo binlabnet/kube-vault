@@ -92,12 +92,12 @@
     }
   })
 
-  function toggleNewItemMode() {
+  function toggleNewItemMode () {
     newItemMode = !newItemMode
     newItemKey = ""
     newItemValue = ""
   }
-  function toggleItemEditMode(value) {
+  function toggleItemEditMode (value) {
     editItemMode = !editItemMode
     if (value) {
       editItemKey = value.key
@@ -106,7 +106,7 @@
     editItemKey = ""
   }
 
-  function createItem() {
+  function createItem () {
     if (!newItemKey.length || !newItemValue.length) {
       return
     }
@@ -120,13 +120,13 @@
     updateSecret(itemsList)
     toggleNewItemMode()
   }
-  function deleteItem(item) {
+  function deleteItem (item) {
     if (confirm(`Are you sure you want to delete item ${item.key}?`)) {
       const itemsList = items.filter(i => i !== item)
       updateSecret(itemsList)
     }
   }
-  function updateItem(item) {
+  function updateItem (item) {
     const itemsList = items
     itemsList[item.key] = item.value
 
@@ -134,7 +134,7 @@
     toggleItemEditMode()
   }
 
-  function updateSecret(itemsList) {
+  function updateSecret (itemsList) {
     let data = itemsList.reduce((result, i) => {
       const key = Object.keys(i)[0]
       const value = Object.keys(i)[1]
@@ -160,7 +160,7 @@
       console.log(err)
     })
   }
-  function deleteSecret() {
+  function deleteSecret () {
     if (confirm(`Are you sure you want to delete secret ${secret.name}?`)) {
       axios.delete(`${process.env.API_HOST}/vault/${secret.namespace}/${secret.name}`).then(() => {
         secrets.update()

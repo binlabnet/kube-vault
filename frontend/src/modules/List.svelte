@@ -36,8 +36,8 @@
     secrets.select(value)
   }
 
-  function createSecret() {
-    let name = prompt('Provide name for new secret:')
+  function createSecret () {
+    let name = prompt("Provide name for new secret:")
     if (!name.length) {
       return
     }

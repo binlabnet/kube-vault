@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: kube-vault-deployment
+  name: kube-vault
   labels:
     app: kube-vault
 spec:
@@ -16,6 +16,7 @@ spec:
       labels:
         app: kube-vault
     spec:
+      serviceAccountName: kube-vault-serviceaccount
       containers:
         - name: kube-vault
           image: exelban/kube-vault:0.0.1
@@ -25,10 +26,14 @@ spec:
               containerPort: 8080
               protocol: TCP
           livenessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
             httpGet:
               path: /healthz
               port: app-port
           readinessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
             httpGet:
               path: /readyz
               port: app-port

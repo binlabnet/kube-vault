@@ -18,7 +18,8 @@ export const namespaces = (() => {
     axios.get(`${process.env.API_HOST}/namespaces`).then((res) => {
       if (res.data) {
         set(res.data)
-        selected.set(res.data[0])
+        const defaultNamespace = res.data.findIndex(n => n === process.env.NAMESPACE)
+        selected.set(res.data[defaultNamespace])
       }
     }).catch((err) => {
       console.log(err)

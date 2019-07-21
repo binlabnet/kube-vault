@@ -13,16 +13,17 @@
     margin: auto;
   }
   .loader--wrapper:after {
-     content: " ";
-     display: block;
-     width: 46px;
-     height: 46px;
-     margin: 1px;
-     border-radius: 50%;
-     border: 5px solid #4a57ff;
-     border-color: #4a57ff transparent #4a57ff transparent;
-     animation: loader--wrapper-animation 1.2s linear infinite;
-   }
+    content: " ";
+    display: block;
+    width: 46px;
+    height: 46px;
+    margin: 1px;
+    border-radius: 50%;
+    border: 5px solid #4a57ff;
+    border-color: #4a57ff transparent #4a57ff transparent;
+    animation: loader--wrapper-animation 1.2s linear infinite;
+  }
+
   @keyframes loader--wrapper-animation {
     0% {
       transform: rotate(0deg);

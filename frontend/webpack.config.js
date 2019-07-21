@@ -81,7 +81,8 @@ module.exports = (env, argv) => {
       new webpack.DefinePlugin({
         "process.env": {
           VERSION: JSON.stringify(PACKAGE.version),
-          API_HOST: JSON.stringify(!prod ? "http://localhost:9090" : ""),
+          API_HOST: JSON.stringify(!prod ? "http://localhost:8080" : ""),
+          NAMESPACE: JSON.stringify(process.env.NAMESPACE ? process.env.NAMESPACE : "default"),
         },
       }),
     ],
