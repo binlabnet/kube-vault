@@ -1,5 +1,6 @@
-<div class="secretsList">
+<div class="secretsList column">
   {#if $secrets.length}
+    <div class="container">
     {#each $secrets as secret}
       <div
         on:click="{() => selectSecret(secret)}"
@@ -10,8 +11,10 @@
         <p>{secret.objects}</p>
       </div>
     {/each}
-    <div class="footer row a-center j-end">
-      <button on:click="{createSecret}">Add</button>
+    </div>
+    <div class="footer row a-center j-between">
+      <p>{$secrets.length} secrets</p>
+      <button on:click="{createSecret}">New secret</button>
     </div>
   {:else}
     <Loader/>
@@ -37,8 +40,8 @@
   }
 
   function createSecret () {
-    let name = prompt("Provide name for new secret:")
-    if (!name.length) {
+    let name = prompt("Provide a name for the new secret:")
+    if (!name || !name.length) {
       return
     }
     const namespace = get(namespaces.selected)
@@ -48,7 +51,9 @@
         secrets.update()
       }
     }).catch((err) => {
-      console.log(err)
+      if (err.response && err.response.data) {
+        alert(err.response.data)
+      }
     })
   }
 </script>
@@ -58,11 +63,15 @@
     width: 240px;
     height: 100%;
     border-right: solid #d7d7d7 1px;
-    overflow-x: hidden;
     position: relative;
   }
 
-  .secretsList > .secret {
+  .secretsList > .container {
+    width: 100%;
+    height: calc(100% - 50px);
+    overflow-x: hidden;
+  }
+  .secretsList > .container > .secret {
     width: 100%;
     height: 50px;
     padding: 0 10px;
@@ -70,21 +79,21 @@
     transition: background-color 100ms ease;
     border-bottom: solid #ededed 1px;
   }
-  .secretsList > .secret:last-child {
+  .secretsList > .container > .secret:last-child {
     border: none;
   }
-  .secretsList > .secret.active {
+  .secretsList > .container > .secret.active {
     background: #f1f1f1;
   }
-  .secretsList > .secret:hover {
+  .secretsList > .container > .secret:hover {
     background: #f1f1f1;
     transition: background-color 200ms ease;
   }
-  .secretsList > .secret > h2 {
+  .secretsList > .container > .secret > h2 {
     font-weight: normal;
     font-size: 14px;
   }
-  .secretsList > .secret > p {
+  .secretsList > .container > .secret > p {
     font-weight: lighter;
     font-size: 12px;
   }
@@ -92,9 +101,8 @@
   .secretsList > .footer {
     width: 100%;
     height: 50px;
-    position: absolute;
-    bottom: 0;
     border-top: solid #d7d7d7 1px;
     padding: 8px;
+    background: #ffffff;
   }
 </style>

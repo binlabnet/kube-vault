@@ -33,7 +33,7 @@ type secretListItem struct {
 	Objects int    `json:"objects"`
 }
 
-// Init - Init function for initializing connection with kubernetes
+// Init function which initializing connection with kubernetes
 func (m *Vault) Init(kubeconfig string, debug bool) error {
 	var config *rest.Config
 
@@ -70,7 +70,7 @@ func (m *Vault) Init(kubeconfig string, debug bool) error {
 	return nil
 }
 
-// NamespacesList - NamespacesList handler which return a list namespaces
+// NamespacesList - handler which return a list namespaces
 func (m *Vault) NamespacesList(w http.ResponseWriter, r *http.Request) {
 	n := m.kubeClient.CoreV1().Namespaces()
 	list, err := n.List(metav1.ListOptions{})
@@ -95,7 +95,7 @@ func (m *Vault) NamespacesList(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(b)
 }
 
-// Get - Get handler which return a list of secrets in selected namespaces
+// Get - handler which return a list of secrets in selected namespaces
 func (m *Vault) Get(w http.ResponseWriter, r *http.Request) {
 	namespace := chi.URLParam(r, "namespace")
 	_, err := m.kubeClient.CoreV1().Namespaces().Get(namespace, metav1.GetOptions{})
@@ -130,7 +130,7 @@ func (m *Vault) Get(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(b)
 }
 
-// Find - Find handler which find and return selected secret from selected namespace
+// Find - handler which allow to find and return selected secret from selected namespace
 func (m *Vault) Find(w http.ResponseWriter, r *http.Request) {
 	namespace := chi.URLParam(r, "namespace")
 	_, err := m.kubeClient.CoreV1().Namespaces().Get(namespace, metav1.GetOptions{})
@@ -168,8 +168,9 @@ func (m *Vault) Find(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(b)
 }
 
-// Add - Add handler which add new secret to selected namespace
+// Add - handler which allow to add a new secret to selected namespace
 func (m *Vault) Add(w http.ResponseWriter, r *http.Request) {
+
 	namespace := chi.URLParam(r, "namespace")
 	_, err := m.kubeClient.CoreV1().Namespaces().Get(namespace, metav1.GetOptions{})
 	if k8sErrors.IsNotFound(err) {
@@ -198,7 +199,7 @@ func (m *Vault) Add(w http.ResponseWriter, r *http.Request) {
 
 	for key, value := range secretData {
 		if !configMapKeyRegexp.MatchString(key) {
-			http.Error(w, "secret name must consist of alphanumeric characters, '-', '_' or '.'", http.StatusBadRequest)
+			http.Error(w, "key must consist of alphanumeric characters, '-', '_' or '.'", http.StatusBadRequest)
 			return
 		}
 
@@ -247,7 +248,7 @@ func (m *Vault) Add(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(b)
 }
 
-// Delete - Delete handler which find and delete selected secret from selected namespace
+// Delete - handler which allow to find and delete selected secret from selected namespace
 func (m *Vault) Delete(w http.ResponseWriter, r *http.Request) {
 	namespace := chi.URLParam(r, "namespace")
 	_, err := m.kubeClient.CoreV1().Namespaces().Get(namespace, metav1.GetOptions{})
