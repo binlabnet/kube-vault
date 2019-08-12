@@ -6,8 +6,12 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path"
+	"path/filepath"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -159,4 +163,53 @@ func TestNotFound(t *testing.T) {
 	resp, err = client.Do(req)
 	require.NoError(t, err)
 	assert.Equal(t, http.StatusCreated, resp.StatusCode, "must be 201")
+}
+
+func TestIndex(t *testing.T) {
+	srv := &Rest{
+		Port:  4871,
+		Ready: &atomic.Value{},
+		Vault: &Vault{},
+	}
+
+	go func() {
+		err := srv.Run(context.Background())
+		require.NoError(t, err)
+	}()
+
+	err := os.RemoveAll("dist")
+	require.NoError(t, err)
+
+	req, err := http.NewRequest("GET", fmt.Sprintf("http://localhost:%d/index.html", srv.Port), nil)
+	require.Nil(t, err)
+	client := &http.Client{Timeout: 5 * time.Second}
+	resp, err := client.Do(req)
+	require.NoError(t, err)
+	assert.Equal(t, http.StatusNotFound, resp.StatusCode, "not found, because there is no index.html file")
+
+	err = os.MkdirAll("dist", os.ModePerm)
+	if !os.IsExist(err) {
+		require.NoError(t, err)
+	}
+
+	workDir, _ := os.Getwd()
+	filesDir := filepath.Join(workDir, "dist")
+	err = ioutil.WriteFile(path.Join(filesDir, "index.html"), []byte("Hello World"), 0755)
+	require.NoError(t, err)
+
+	req, err = http.NewRequest("GET", fmt.Sprintf("http://localhost:%d/index.html", srv.Port), nil)
+	require.Nil(t, err)
+	client = &http.Client{Timeout: 5 * time.Second}
+	resp, err = client.Do(req)
+	require.NoError(t, err)
+	assert.Equal(t, http.StatusOK, resp.StatusCode, "must be 200")
+
+	err = os.RemoveAll("dist")
+	require.NoError(t, err)
+
+	go func() {
+		time.Sleep(100 * time.Millisecond)
+		err := srv.Shutdown(context.Background())
+		require.NoError(t, err)
+	}()
 }
