@@ -1,4 +1,8 @@
-<div class="loader--wrapper"></div>
+<div class="loader--wrapper">
+  <div class="o first"></div>
+  <div class="o second"></div>
+  <div class="o third"></div>
+</div>
 
 <style>
   .loader--wrapper {
@@ -12,19 +16,32 @@
     bottom: 0;
     margin: auto;
   }
-  .loader--wrapper:after {
-    content: " ";
-    display: block;
-    width: 46px;
-    height: 46px;
-    margin: 1px;
+
+  .o {
+    box-sizing: border-box;
+    position: absolute;
     border-radius: 50%;
-    border: 5px solid #4a57ff;
-    border-color: #4a57ff transparent #4a57ff transparent;
-    animation: loader--wrapper-animation 1.2s linear infinite;
+    width: 60px;
+    height: 60px;
+    border: 2px solid rgba(0, 0, 60, .1);
   }
 
-  @keyframes loader--wrapper-animation {
+  .first {
+    animation: loader--animation 1.1s infinite cubic-bezier(0, 0, 1, 1);
+    border-left: 3px solid rgba(0, 0, 60, .7);
+  }
+
+  .second {
+    animation: loader--animation 0.6s infinite cubic-bezier(0, 0, 1, 1);
+    border-left: 3px solid rgba(255, 0, 0, .7);
+  }
+
+  .third {
+    animation: loader--animation 0.9s infinite cubic-bezier(0, 0, 1, 1);
+    border-left: 3px solid rgba(100, 100, 255, .7);
+  }
+
+  @keyframes loader--animation {
     0% {
       transform: rotate(0deg);
     }
