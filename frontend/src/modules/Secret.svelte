@@ -4,8 +4,8 @@
       <h4>{secret.name}</h4>
       <div class="row">
         {#if !newItemMode}
-          <button on:click="{deleteSecret}">Delete secret</button>
-          <button on:click="{toggleNewItemMode}">Add item</button>
+          <Button red onclick="{deleteSecret}" title="Delete secret">Delete secret</Button>
+          <Button onclick="{toggleNewItemMode}" title="Add item">Add item</Button>
         {/if}
       </div>
     </div>
@@ -16,8 +16,8 @@
         <input type="text" bind:value={newItemValue} placeholder="Value">
 
         <div class="row a-center j-end">
-          <button on:click="{toggleNewItemMode}">Cancel</button>
-          <button on:click="{createItem}">Save</button>
+          <Button red onclick="{toggleNewItemMode}" title="Discard creating new item">Cancel</Button>
+          <Button green onclick="{createItem}" title="Create new item">Create</Button>
         </div>
       </div>
     {/if}
@@ -36,11 +36,11 @@
             {/if}
             <div class="menu column">
               {#if editItemMode && editItemKey === item.key}
-                <button on:click="{() => updateItem(item)}">Save</button>
+                <Button outlined green onclick="{() => updateItem(item)}" title="Save item with key {item.key}">Save</Button>
               {:else}
-                <button on:click="{() => toggleItemEditMode(item)}">Edit</button>
+                <Button outlined onclick="{() => toggleItemEditMode(item)}" title="Edit item with key {item.key}">Edit</Button>
               {/if}
-              <button on:click="{() => deleteItem(item)}">Remove</button>
+              <Button outlined red onclick="{() => deleteItem(item)}" title="Remove item with key {item.key}">Remove</Button>
             </div>
           </div>
         {/each}
@@ -56,6 +56,7 @@
 <script>
   import axios from "axios"
   import Loader from "components/Loader"
+  import Button from "components/Button"
   import { secrets } from "store.js"
 
   let secret
@@ -263,8 +264,5 @@
     width: 80px;
     height: auto;
     margin: 0 5px;
-  }
-  .secretView > .secrets > .secret > .menu > button {
-    cursor: pointer;
   }
 </style>

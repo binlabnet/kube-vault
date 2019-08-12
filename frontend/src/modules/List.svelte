@@ -14,7 +14,7 @@
     </div>
     <div class="footer row a-center j-between">
       <p>{$secrets.length} secrets</p>
-      <button on:click="{createSecret}">New secret</button>
+      <Button onclick="{createSecret}" title="Create new secret">New secret</Button>
     </div>
   {:else}
     <Loader/>
@@ -23,6 +23,7 @@
 
 <script>
   import Loader from "components/Loader"
+  import Button from "components/Button"
   import { namespaces, secrets } from "store.js"
   import { get } from "svelte/store"
   import axios from "axios"
@@ -68,7 +69,7 @@
 
   .secretsList > .container {
     width: 100%;
-    height: calc(100% - 50px);
+    height: calc(100% - 60px);
     overflow-x: hidden;
   }
   .secretsList > .container > .secret {
@@ -100,7 +101,7 @@
 
   .secretsList > .footer {
     width: 100%;
-    height: 50px;
+    height: 60px;
     border-top: solid #d7d7d7 1px;
     padding: 8px;
     background: #ffffff;
