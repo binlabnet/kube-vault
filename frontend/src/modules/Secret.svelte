@@ -4,9 +4,9 @@
       <h4>{secret.name}</h4>
       <div class="row">
         {#if !newItemMode}
+          <button on:click="{deleteSecret}">Delete secret</button>
           <button on:click="{toggleNewItemMode}">Add item</button>
         {/if}
-        <button on:click="{deleteSecret}">Delete secret</button>
       </div>
     </div>
 
@@ -16,8 +16,8 @@
         <input type="text" bind:value={newItemValue} placeholder="Value">
 
         <div class="row a-center j-end">
-          <button on:click="{createItem}">Save</button>
           <button on:click="{toggleNewItemMode}">Cancel</button>
+          <button on:click="{createItem}">Save</button>
         </div>
       </div>
     {/if}
