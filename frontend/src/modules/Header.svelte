@@ -1,7 +1,7 @@
 <header class="row a-center j-between">
   <div class="name row a-base">
     <h1 title="kube-vault">kube-vault</h1>
-    <a href="https://github.com/exelban/kube-vault" target="_blank" title="Project page">{version}</a>
+    <a href="https://github.com/exelban/kube-vault" target="_blank" rel="noopener" title="Project page">{version}</a>
   </div>
 
   {#if $namespaces && $namespaces.length}
