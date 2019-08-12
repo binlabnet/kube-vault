@@ -3,7 +3,7 @@ import axios from "axios"
 
 
 export const namespaces = (() => {
-  const { subscribe, set } = writable([])
+  const { subscribe, set } = writable(undefined)
 
   const selected = (() => {
     const { subscribe, set, update } = writable(undefined)
@@ -21,8 +21,8 @@ export const namespaces = (() => {
         const defaultNamespace = res.data.findIndex(n => n === process.env.NAMESPACE)
         selected.set(res.data[defaultNamespace])
       }
-    }).catch((err) => {
-      console.log(1, err)
+    }).catch(() => {
+      selected.set(false)
     })
   }
   fetchNamespaces()

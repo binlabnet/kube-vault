@@ -4,7 +4,7 @@
     <a href="https://github.com/exelban/kube-vault" target="_blank" title="Project page">{version}</a>
   </div>
 
-  {#if $namespaces.length}
+  {#if $namespaces && $namespaces.length}
     <div class="namespaces">
       <select title="Namespace" bind:value={selectedNamespace}>
         {#each $namespaces as n}
