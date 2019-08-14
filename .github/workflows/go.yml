@@ -13,7 +13,12 @@ jobs:
         version: 1.12
       id: go
 
+    - name: Check out code into the Go module directory
+      use: actions/checkout@master
+      path: ${{ go.module-path }}
+      
     - name: Build
+      working-directory: ${{ go.module-path }}
       env: 
         GO111MODULE: on
       run: |
