@@ -66,7 +66,7 @@ Backend application receive next environment variables:
 | Variable | Default | Description |
 | --- | --- | --- |
 | NAMESPACE | default | Default namespace |
-| HOME | | (optional) absolute path to the kubeconfig file |
+| HOME | | Absolute path to the kubeconfig file (optional)  |
 | PORT | 8080 | Rest server port |
 
 
