@@ -1,0 +1,47 @@
+name: Deploy to docker hub
+
+on: 
+   push:
+     tags:
+       - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Set version tag
+        id: tag
+        run: |
+          VERSION_TAG=$(echo ${GITHUB_REF##*/} | sed -e "s#^v##")
+          echo ::set-env name=GITHUB_TAG::$VERSION_TAG
+          
+      - uses: actions/checkout@master
+      
+      - name: Build image
+        uses: actions/docker/cli@master
+        with:
+          args: build -t ${GITHUB_REPOSITORY} .
+          
+      - name: Tag image
+        if: github.event_name == 'release'
+        uses: actions/docker/cli@master
+        with:
+          args: tag ${GITHUB_REPOSITORY} ${GITHUB_REPOSITORY}:${GITHUB_TAG}
+
+      - name: Login to docker hub
+        uses: actions/docker/login@master
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push to docker hub :latest
+        uses: actions/docker/cli@master
+        with:
+          args: push ${GITHUB_REPOSITORY}:latest
+          
+      - name: Push to docker hub :tag
+        if: github.event_name == 'release'
+        uses: actions/docker/cli@master
+        with:
+          args: push ${GITHUB_REPOSITORY}:${GITHUB_TAG}
