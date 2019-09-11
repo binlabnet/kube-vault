@@ -1,7 +1,7 @@
 # kube-vault
 
-[![](https://github.com/exelban/kube-vault/workflows/Deploy%20to%20docker%20hub/badge.svg)](https://github.com/exelban/kube-vault/actions")
-[![](https://images.microbadger.com/badges/version/exelban/kube-vault.svg)](https://github.com/exelban/kube-vault")
+[![](https://github.com/exelban/kube-vault/workflows/Deploy%20to%20docker%20hub/badge.svg)](https://github.com/exelban/kube-vault/actions)
+[![](https://images.microbadger.com/badges/version/exelban/kube-vault.svg)](https://github.com/exelban/kube-vault)
 
 Manage your secrets in kubernetes using simple UI.
 
